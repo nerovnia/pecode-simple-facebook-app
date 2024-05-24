@@ -10,10 +10,18 @@ export class AuthService {
   ) {}
 
   async create(data: any): Promise<User> {
-    return this.userRepository.save(data);
+    try {
+      return this.userRepository.save(data);
+    } catch (error) {
+      throw new Error(`Error create user: ${error.message}`);
+    }
   }
 
   async findOne(condition: any): Promise<User> {
-    return this.userRepository.findOne(condition);
+    try {
+      return await this.userRepository.findOne(condition);
+    } catch (error) {
+      throw new Error(`Error finding user: ${error.message}`);
+    }
   }
 }
