@@ -8,12 +8,14 @@
 Create .env
 
 ```text
-APP_PORT=port
-DATABASE_HOST=host
-DATABASE_PORT=port
 DATABASE_DBNAME=dbname
 DATABASE_USER=myuser
 DATABASE_PASSWORD=mypassword
+JWT_SECRET=secret
+APP_STATE=production || development (default 'production')
+APP_PORT=port (default 3000)
+DATABASE_HOST=host (default 'localhost')
+DATABASE_PORT=port (default 5432)
 ```
 
 ## Installation
