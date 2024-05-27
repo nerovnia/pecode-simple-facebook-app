@@ -6,7 +6,7 @@ import { ResponsePostDto } from '../../dto/response-post.dto';
 import { PostsService } from './posts.service';
 import { Req } from '@nestjs/common';
 
-@Controller('post')
+@Controller()
 export class PostsController {
 
   constructor(
@@ -15,16 +15,16 @@ export class PostsController {
   ) {}
 
   @UseGuards(AuthGuard)
-  @Get(':id')
-  getPosts(): any { //CreatePostDto[] {
-    return 'Get post';
+  @Get('posts')
+  getPosts(): any {
+    return this.postsService.getAllPosts();
   }
 
   @UseGuards(AuthGuard)
-  @Post('new')
+  @Post('post/new')
   createPost(
     @Body() createPostDto: CreatePostDto, @Req() req: any
-  ):  any { //ResponsePostDto {
+  ):  any {
     const userEmail = this.extractUserEmailFromToken(req);
     return this.postsService.createPost(createPostDto, userEmail);
   }
