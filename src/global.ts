@@ -1,4 +1,6 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
+import { appConfig } from './config/app.default.config';
+import 'dotenv/config';
 
-global.isProduction = (process.env.APP_STATE || 'production') === 'production';
+global.isProduction =
+  (process.env.APP_STATE || appConfig.main.state) === 'production';
+global.JWT_EXP_TIME = process.env.JWT_EXP_TIME || appConfig.auth.jwtExpTime;
