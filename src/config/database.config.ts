@@ -1,8 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { User } from '../modules/users/user.entity';
 import { Post } from '../modules/posts/post.entity';
-import * as dotenv from 'dotenv';
-dotenv.config();
+import 'dotenv/config';
 
 export const databaseConfig: TypeOrmModuleOptions = {
   type: 'postgres',
