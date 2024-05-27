@@ -1,37 +1,54 @@
-import { Controller, Get, HttpCode, Post, Body } from '@nestjs/common';
-//import crypto from 'crypto';
+import {
+  UseGuards,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  Body,
+  NotAcceptableException,
+  Query,
+  NotFoundException,
+} from '@nestjs/common';
 import { createHash } from 'node:crypto';
 import { AuthService } from './auth.service';
-
+import { AuthGuard } from './auth.guard';
+import { CreateUserDto } from '../../dto/create-user.dto';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('user')
-  getUser(): string {
-    return 'Get User';
-  }
-
   @Post('register')
   @HttpCode(201)
   async register(
-    @Body('name') fullName: string,
-    @Body('email') email: string,
-    @Body('password') password: string,
+    @Body() createUserDto: CreateUserDto
   ) {
-    const hash = createHash('sha256').update(password).digest('hex');
-
-    const res = this.authService.create({
-      fullName,
-      email,
-      password: hash,
-    });
-    return JSON.stringify(res);
+    const hash = createHash('sha256').update(createUserDto.password).digest('hex');
+    try {
+      const res = await this.authService.create({
+        fullName: createUserDto.fullName,
+        email: createUserDto.email,
+        password: hash,
+      });
+      return JSON.stringify(res);
+    } catch (error) {
+      throw new NotAcceptableException(error.message);
+    }
   }
 
   @Post('login')
   @HttpCode(200)
-  async login() {
-    return 'Post login';
+  async login(
+    @Body('email') email: string,
+    @Body('password') password: string,
+  ): Promise<any> {
+    return await this.authService.login(email, password);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('user')
+  async getUser(@Query('id') userId: string) {
+    const id = Number.parseInt(userId);
+    if (!id) throw new NotFoundException();
+    return await this.authService.getUser(id);
   }
 }
