@@ -1,7 +1,5 @@
-import { IsString, IsNumber} from 'class-validator';
-
 export class ResponsePostDto {
   id: number;
-  createdBy: string;
+  createdBy: number;
   post: string;
 }
