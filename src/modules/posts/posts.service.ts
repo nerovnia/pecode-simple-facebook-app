@@ -1,11 +1,9 @@
 import { Injectable, InternalServerErrorException, NotAcceptableException } from '@nestjs/common';
 import { CreatePostDto } from '../../dto/create-post.dto';
 import { ResponsePostDto } from '../../dto/response-post.dto';
-
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Post } from './post.entity';
-
 import { JwtService } from '@nestjs/jwt';
 import { Response } from '../../shared/interfaces/response.interface';
 import { AuthService } from '../auth/auth.service';
@@ -43,17 +41,20 @@ export class PostsService {
     }
   }
   
-  async getAllPosts() {
-
-  }
-
-  async selectAll(): Promise<Post[]> {
+  async getAllPosts(): Promise<Post[]> {
     try {
       const posts = await this.postRepository
-        .createQueryBuilder('post')
-        .where('user.email = :email', { email: email })
-        .getOne();
-      return userWithExistsEmail;
+      .createQueryBuilder('post')
+      .innerJoin('post.createdBy', 'iuser')
+      .select([
+        'post.id',
+        'post.post',
+        'post.createdById',
+        'iuser.fullName',
+        'iuser.email'
+      ])
+      .getRawMany();
+      return posts;
     } catch (error) {
       throw new Error(`Error finding user.`);
     }
