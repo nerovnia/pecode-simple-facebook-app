@@ -1,6 +1,8 @@
 import {
   Injectable,
+  InternalServerErrorException,
   NotAcceptableException,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -30,24 +32,35 @@ export class AuthService {
         },
       };
     } catch (error) {
-      throw new NotAcceptableException('Error create new user');
+      if (error instanceof NotAcceptableException) {
+        throw new NotAcceptableException(error.message);
+      } else {
+        throw new InternalServerErrorException('Internal server error!');
+      }
     }
   }
 
   async login(email: string, password: string): Promise<Response> {
-    console.log(email, password);
-    const result = await this.findOne(email);
-    const hash = createHash('sha256').update(password).digest('hex');
-    if (hash !== result.password) {
-      throw new UnauthorizedException();
+    try {
+      const result = await this.findOne(email);
+      const hash = createHash('sha256').update(password).digest('hex');
+      if ((!result) || (hash !== result.password)) {
+        throw new UnauthorizedException('User is absend or password is incorrect!');
+      }
+      const payload = { username: email };
+      return {
+        statusCode: 200,
+        body: {
+          access_token: await this.jwtService.signAsync(payload),
+        },
+      };
+    } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        throw new UnauthorizedException(error.message);
+      } else {
+        throw new InternalServerErrorException('Internal server error!');
+      }
     }
-    const payload = { username: email };
-    return {
-      statusCode: 200,
-      body: {
-        access_token: await this.jwtService.signAsync(payload),
-      },
-    };
   }
 
   async findOne(email: string): Promise<User> {
@@ -58,7 +71,7 @@ export class AuthService {
         .getOne();
       return userWithExistsEmail;
     } catch (error) {
-      throw new Error(`Error finding user.`);
+      throw new UnauthorizedException('User is absend or password is incorrect!');
     }
   }
 
@@ -68,11 +81,15 @@ export class AuthService {
         .createQueryBuilder('user')
         .where('user.id = :id', { id: id })
         .getOne();
-      if (!userWithExistsId) throw new Error(`Error finding user.`);
+      if (!userWithExistsId) throw new NotFoundException(`User is absend.`);
       const result = this.toUserDto(userWithExistsId)
       return result;
     } catch (error) {
-      throw new Error(`Error finding user.`);
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      } else {
+        throw new InternalServerErrorException('Internal server error!');
+      }
     }
   }
 
