@@ -64,8 +64,8 @@ $ pnpm run start:prod
 ## Database migrations
 
 ```
-$ npm run typeorm:create-migration          # Create a migration
-$ npm run typeorm:generate-migration        # Generate a migration
-$ npm run typeorm:run-migration             # Run a migration
-$ npm run typeorm:revert-migration          # Revert a migration
+$ pnpm run typeorm:create-migration          # Create a migration
+$ pnpm run typeorm:generate-migration        # Generate a migration
+$ pnpm run typeorm:run-migrations            # Run a migration
+$ pnpm run typeorm:revert-migration          # Revert a migration
 ```
