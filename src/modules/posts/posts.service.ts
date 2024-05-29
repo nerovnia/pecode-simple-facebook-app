@@ -24,20 +24,25 @@ export class PostsService {
 
   async createPost(createPostDto: CreatePostDto, userEmail: string): Promise<Response> {
     try {
+      const errMsg = 'Error create new post';
       const post = new Post();
       post.post = createPostDto.post;
       const user = await this.authService.findOne(userEmail);
-      if (!user) throw new InternalServerErrorException('User not found');
+      if (!user) throw new NotAcceptableException(errMsg);
       post.createdBy = user.id;
       const savedPostRecord = await this.postRepository.save(post);
-      if (!savedPostRecord) throw new NotAcceptableException('Error create new post');
+      if (!savedPostRecord) throw new NotAcceptableException(errMsg);
       const result = this.toPostDto(savedPostRecord);
       return {
         statusCode: 200,
         body: result,
       };
     } catch (error) {
-      throw new NotAcceptableException('Error create new post');
+      if (error instanceof NotAcceptableException) {
+        throw new NotAcceptableException('error.message');
+      } else {
+        throw new InternalServerErrorException('Internal server error!');
+      }
     }
   }
   
@@ -56,7 +61,7 @@ export class PostsService {
       .getRawMany();
       return posts;
     } catch (error) {
-      throw new Error(`Error finding user.`);
+      throw new InternalServerErrorException('Internal server error!');
     }
   }
 
