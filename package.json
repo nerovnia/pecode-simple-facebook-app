@@ -8,9 +8,10 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "env APP_STATE=production nest start",
+    "start": "env APP_STATE=development nest start",
     "start:dev": "env APP_STATE=development nest start --watch",
     "start:debug": "env APP_STATE=development nest start --debug --watch",
+    "start:prod": "env APP_STATE=production node dist/src/main",
     "typeorm": "ts-node ./node_modules/typeorm/cli",
     "typeorm:run-migrations": "npm run typeorm migration:run -- -d ./src/config/database.config.ts",
     "typeorm:generate-migration":  "npm run typeorm -- -d ./src/config/database.config.ts migration:generate ./db/migrations/PostRefactoring",
