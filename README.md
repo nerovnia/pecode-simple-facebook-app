@@ -21,7 +21,6 @@ JWT_SECRET=secret
 `Can use as default`
 
 ```text
-APP_STATE=production || development (default 'production')
 APP_PORT=port (default 3000)
 DATABASE_HOST=host (default 'localhost')
 DATABASE_PORT=port (default 5432)
@@ -33,6 +32,11 @@ JWT_EXP_TIME=time (default 15m')
 *src/config/app.default.config.ts*
 
 ```ts
+{
+  main: {
+    state: 'production',
+    port: 3000,
+  },
   auth: {
     jwtExpTime: '15m',
   },
@@ -41,6 +45,7 @@ JWT_EXP_TIME=time (default 15m')
     port: 5432,
     user: 'postgres',
   },
+};
 ```
 
 ## Installation
