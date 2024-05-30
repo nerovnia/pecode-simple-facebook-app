@@ -1,5 +1,7 @@
 # Simple facebook like application
 
+[API documentation](./doc/api/index.md)
+
 **Please use:**
 
 - Node.js: `>=20`
@@ -74,3 +76,4 @@ $ pnpm run typeorm:generate-migration        # Generate a migration
 $ pnpm run typeorm:run-migrations            # Run a migration
 $ pnpm run typeorm:revert-migration          # Revert a migration
 ```
+
