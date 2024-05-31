@@ -2,6 +2,10 @@
 
 # API documentation
 
+Import Postman json [file](../../resources/Pecode%20Facebook%20App.postman_collection.json)
+
+
+
 `Create Accounts : POST /auth/register/`
 
 ```json
