@@ -1,6 +1,9 @@
 import { IsString, IsNumber} from 'class-validator';
 
-export class CreatePostDto {
+export class PostDto {
+  @IsNumber()
+  id?: number;
+
   @IsNumber()
   createdBy: number;
 

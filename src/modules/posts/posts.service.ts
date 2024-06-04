@@ -1,6 +1,5 @@
 import { Injectable, InternalServerErrorException, NotAcceptableException } from '@nestjs/common';
-import { CreatePostDto } from '../../dto/create-post.dto';
-import { ResponsePostDto } from '../../dto/response-post.dto';
+import { PostDto } from '../../dto/post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Post } from './post.entity';
@@ -22,7 +21,7 @@ export class PostsService {
   ) {}
 
 
-  async createPost(createPostDto: CreatePostDto, userEmail: string): Promise<Response> {
+  async createPost(createPostDto: PostDto, userEmail: string): Promise<Response> {
     try {
       const errMsg = 'Error create new post';
       const post = new Post();
@@ -66,7 +65,7 @@ export class PostsService {
   }
 
 
-  private toPostDto(post: any): ResponsePostDto {
+  private toPostDto(post: any): PostDto {
     return {
       id: post.id,
       post: post.post,

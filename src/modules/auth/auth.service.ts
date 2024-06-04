@@ -22,6 +22,8 @@ export class AuthService {
 
   async create(data: any): Promise<Response> {
     try {
+      console.log('Auth service ---------------------------');
+      console.log(data);
       const result = await this.userRepository.save(data);
       if (!result) throw new NotAcceptableException('Error create new user');
       const payload = { username: data.email };

@@ -1,8 +1,7 @@
 import { UseGuards, Controller, Get, Post, Body } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { JwtService } from '@nestjs/jwt';
-import { CreatePostDto } from '../../dto/create-post.dto';
-import { ResponsePostDto } from '../../dto/response-post.dto';
+import { PostDto } from '../../dto/post.dto';
 import { PostsService } from './posts.service';
 import { Req } from '@nestjs/common';
 
@@ -23,7 +22,7 @@ export class PostsController {
   @UseGuards(AuthGuard)
   @Post('post/new')
   createPost(
-    @Body() createPostDto: CreatePostDto, @Req() req: any
+    @Body() createPostDto: PostDto, @Req() req: any
   ):  any {
     const userEmail = this.extractUserEmailFromToken(req);
     return this.postsService.createPost(createPostDto, userEmail);

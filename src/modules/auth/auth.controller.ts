@@ -12,7 +12,7 @@ import {
 import { createHash } from 'node:crypto';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
-import { CreateUserDto } from '../../dto/create-user.dto';
+import { UserDto } from '../../dto/user.dto';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -20,8 +20,9 @@ export class AuthController {
   @Post('register')
   @HttpCode(201)
   async register(
-    @Body() createUserDto: CreateUserDto
+    @Body() createUserDto: UserDto
   ) {
+    console.log('Auth controller ---------------------------');
     const hash = createHash('sha256').update(createUserDto.password).digest('hex');
     try {
       const res = await this.authService.create({
