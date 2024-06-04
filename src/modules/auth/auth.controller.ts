@@ -13,6 +13,7 @@ import { createHash } from 'node:crypto';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { UserDto } from '../../dto/user.dto';
+
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -22,7 +23,6 @@ export class AuthController {
   async register(
     @Body() createUserDto: UserDto
   ) {
-    console.log('Auth controller ---------------------------');
     const hash = createHash('sha256').update(createUserDto.password).digest('hex');
     try {
       const res = await this.authService.create({
@@ -30,7 +30,7 @@ export class AuthController {
         email: createUserDto.email,
         password: hash,
       });
-      return JSON.stringify(res);
+      return res;
     } catch (error) {
       throw new NotAcceptableException(error.message);
     }
@@ -41,8 +41,9 @@ export class AuthController {
   async login(
     @Body('email') email: string,
     @Body('password') password: string,
-  ): Promise<any> {
-    return await this.authService.login(email, password);
+  ) {
+    const res = await this.authService.login(email, password);
+    return res;
   }
 
   @UseGuards(AuthGuard)
@@ -50,6 +51,7 @@ export class AuthController {
   async getUser(@Query('id') userId: string) {
     const id = Number.parseInt(userId);
     if (!id) throw new NotFoundException();
-    return await this.authService.getUser(id);
+    const res = await this.authService.getUser(id);
+    return res;
   }
 }
