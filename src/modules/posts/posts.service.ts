@@ -4,9 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Post } from './post.entity';
 import { JwtService } from '@nestjs/jwt';
-import { Response } from '../../shared/interfaces/response.interface';
+import { Response } from '../../shared/types/response.type';
 import { AuthService } from '../auth/auth.service';
-
 import { User } from '../users/user.entity';
 
 
@@ -21,7 +20,7 @@ export class PostsService {
   ) {}
 
 
-  async createPost(createPostDto: PostDto, userEmail: string): Promise<Response> {
+  async createPost(createPostDto: PostDto, userEmail: string): Promise<Response<PostDto>> {
     try {
       const errMsg = 'Error create new post';
       const post = new Post();
@@ -45,7 +44,7 @@ export class PostsService {
     }
   }
   
-  async getAllPosts(): Promise<Post[]> {
+  async getAllPosts(): Promise<Response<Post[]>> {
     try {
       const posts = await this.postRepository
       .createQueryBuilder('post')
@@ -58,14 +57,17 @@ export class PostsService {
         'iuser.email'
       ])
       .getRawMany();
-      return posts;
+      return {
+        statusCode: 200,
+        body: posts,
+      };
     } catch (error) {
       throw new InternalServerErrorException('Internal server error!');
     }
   }
 
 
-  private toPostDto(post: any): PostDto {
+  private toPostDto(post: PostDto): PostDto {
     return {
       id: post.id,
       post: post.post,

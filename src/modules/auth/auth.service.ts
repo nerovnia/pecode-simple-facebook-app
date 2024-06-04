@@ -11,7 +11,8 @@ import { User } from '../users/user.entity';
 import { createHash } from 'node:crypto';
 import { JwtService } from '@nestjs/jwt';
 import { UserDto } from '../../dto/user.dto';
-import { Response } from '../../shared/interfaces/response.interface';
+import { AccessTokenDto } from '../../dto/access-token.dto';
+import { Response } from '../../shared/types/response.type';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +21,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async create(data: any): Promise<Response> {
+  async create(data: any): Promise<Response<AccessTokenDto>> {
     try {
       console.log('Auth service ---------------------------');
       console.log(data);
@@ -42,7 +43,7 @@ export class AuthService {
     }
   }
 
-  async login(email: string, password: string): Promise<Response> {
+  async login(email: string, password: string): Promise<Response<AccessTokenDto>> {
     try {
       const result = await this.findOne(email);
       const hash = createHash('sha256').update(password).digest('hex');
@@ -77,14 +78,17 @@ export class AuthService {
     }
   }
 
-  async getUser(id: number): Promise<UserDto> {
+  async getUser(id: number): Promise<Response<UserDto>> {
     try {
       const userWithExistsId = await this.userRepository
         .createQueryBuilder('user')
         .where('user.id = :id', { id: id })
         .getOne();
       if (!userWithExistsId) throw new NotFoundException(`User is absend.`);
-      const result = this.toUserDto(userWithExistsId)
+      const result = {
+      statusCode: 200,
+      body: this.toUserDto(userWithExistsId),
+      }
       return result;
     } catch (error) {
       if (error instanceof NotFoundException) {
