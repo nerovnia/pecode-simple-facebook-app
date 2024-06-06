@@ -5,7 +5,7 @@ import { Post } from '../modules/posts/post.entity';
 import 'dotenv/config';
 
 export const databaseConfig: TypeOrmModuleOptions = {
-  type: 'postgres',
+  type: (process.env.DATABASE_TYPE as 'postgres' | 'mysql') || 'postgres',
   host: process.env.DATABASE_HOST || 'localhost',
   port: Number.parseInt(process.env.DATABASE_PORT) || 5432,
   username: process.env.DATABASE_USER || 'postgres',
@@ -19,7 +19,7 @@ export const databaseConfig: TypeOrmModuleOptions = {
 
 
 const dataSource = new DataSource({
-  type: 'postgres',
+  type: (process.env.DATABASE_TYPE as 'postgres' | 'mysql') || 'postgres',
   host: process.env.DATABASE_HOST || 'localhost',
   port: Number.parseInt(process.env.DATABASE_PORT) || 5432,
   username: process.env.DATABASE_USER || 'postgres',

@@ -23,6 +23,7 @@ JWT_SECRET=secret
 `Can use as default`
 
 ```text
+DATABASE_TYPE=type (default 'postgres')
 APP_PORT=port (default 3000)
 DATABASE_HOST=host (default 'localhost')
 DATABASE_PORT=port (default 5432)
