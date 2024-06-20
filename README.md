@@ -5,7 +5,7 @@
 **Please use:**
 
 - Node.js: `>=20`
-- database: `PostgreSQL`
+- database: `PostgreSQL`, `MySQL` or `MariaDB`
 
 ## Set start parameters
 
@@ -39,6 +39,7 @@ JWT_EXP_TIME=time (default 15m')
   main: {
     state: 'production',
     port: 3000,
+    engine: 'express' | 'fastify',
   },
   auth: {
     jwtExpTime: '15m',
