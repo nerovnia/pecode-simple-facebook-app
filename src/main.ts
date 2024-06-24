@@ -29,7 +29,6 @@ async function bootstrap() {
   if (app) {
     await app.listen(appPort, '0.0.0.0');
     console.log(`Server started on port ${appPort}...`);
-    console.log(app);
   } else {
     throw new Error('Server can\'t be started!')
   }
