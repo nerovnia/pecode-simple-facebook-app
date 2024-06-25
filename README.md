@@ -4,7 +4,7 @@
 
 **Please use:**
 
-- Node.js: `>=20`
+- Node.js: `>=18`
 - database: `PostgreSQL`, `MySQL` or `MariaDB`
 
 ## Set start parameters
