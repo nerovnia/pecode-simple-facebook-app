@@ -2,8 +2,11 @@
   "name": "pecode-simple-facebook-app",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Volodymyr Nerovnia",
   "private": true,
+  "engines": {
+    "node": "18 || 20 || 21 || 22"
+  },
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
@@ -11,7 +14,7 @@
     "start": "env APP_STATE=development nest start",
     "start:dev": "env APP_STATE=development nest start --watch",
     "start:debug": "env APP_STATE=development nest start --debug --watch",
-    "start:prod": "env APP_STATE=production node dist/src/main",
+    "start:prod": "env APP_STATE=production node dist/main",
     "typeorm": "ts-node ./node_modules/typeorm/cli",
     "typeorm:run-migrations": "npm run typeorm migration:run -- -d ./src/config/database.config.ts",
     "typeorm:generate-migration": "npm run typeorm -- -d ./src/config/database.config.ts migration:generate ./db/migrations/PostRefactoring",
@@ -21,7 +24,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json --detectOpenHandles --verbose",
+    "test:e2e_": "jest --config ./test/jest-e2e.json --detectOpenHandles --verbose=true --silent=false"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.8",
